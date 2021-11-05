@@ -19,6 +19,10 @@ export class Form extends Component {
 
     if (title && about) {
       this.props.addArticle({ title, about });
+      this.setState({
+        title: '',
+        about: '',
+      })
     }
   };
 
@@ -31,6 +35,7 @@ export class Form extends Component {
             <label className={styles.label}>
               <input
                 onChange={this.handleChange}
+                value={this.state.title}
                 type="text"
                 name="title"
                 placeholder="Добавьте заголовок"
@@ -39,6 +44,7 @@ export class Form extends Component {
             <label className={styles.label}>
               <input
                 onChange={this.handleChange}
+                value={this.state.about}
                 type="text"
                 name="about"
                 placeholder="Добавьте текст"
