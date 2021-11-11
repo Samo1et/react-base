@@ -1,61 +1,74 @@
-import React, { Component } from "react";
-import styles from './faq.module.scss'
+import React, { useContext } from "react";
+import styles from "./faq.module.scss";
+import {ArticleContext} from './index'
+import useForm from './useForm'
 
-export class Form extends Component {
-  state = {
-    title: null,
-    about: null,
-  };
+function validator(values) {
+    let errors = {};
 
-  handleChange = (e) => {
-    if (e.target.value) {
-      this.setState({ [e.target.name]: e.target.value });
+    if (!values.title) {
+      errors.title =  "Title is required"
     }
-  };
 
-  handleSubmitForm = (e) => {
-    e.preventDefault();
-    const { title, about } = this.state;
-
-    if (title && about) {
-      this.props.addArticle({ title, about });
-      this.setState({
-        title: '',
-        about: '',
-      })
+    if (!values.title !== 'title') {
+      errors.title =  "Title isn't title"
     }
-  };
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmitForm}>
-          <fieldset>
-            <legend>Форма</legend>
-            <label className={styles.label}>
-              <input
-                onChange={this.handleChange}
-                value={this.state.title}
-                type="text"
-                name="title"
-                placeholder="Добавьте заголовок"
-              />
-            </label>
-            <label className={styles.label}>
-              <input
-                onChange={this.handleChange}
-                value={this.state.about}
-                type="text"
-                name="about"
-                placeholder="Добавьте текст"
-              />
-            </label>
-            <button type="submit">Добавить</button>
-          </fieldset>
-        </form>
-      </div>
-    );
+    if (!values.about) {
+      errors.about =  "About is required"
+    }
+
+    return errors
+}
+
+function Form() {
+  const [articles, setArticles] = useContext(ArticleContext)
+
+  const {
+    handleChange,
+    handleSubmit,
+    values,
+    errors
+  } = useForm(submitForm, validator)
+
+  function submitForm () {
+    return () => setArticles(prev => [...prev, values])
   }
+
+  console.log(styles)
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <fieldset>
+          <legend>Форма</legend>
+          <label className={styles.label}>
+            <input
+              className={styles.label.input}
+              onChange={handleChange}
+              value={values.title}
+              type="text"
+              name="title"
+              placeholder="Добавьте заголовок"
+            />
+            {errors.title && <p style={{color:'red'}}>{errors.title}</p>}
+          </label>
+          <label className={styles.label}>
+            <input
+              className={styles.input}
+              onChange={handleChange}
+              value={values.about}
+              type="text"
+              name="about"
+              placeholder="Добавьте текст"
+            />
+            {errors.about && <p style={{color:'red'}}>{errors.about}</p>}
+          </label>
+          <button type="submit">Добавить</button>
+        </fieldset>
+      </form>
+    </div>
+  );
 }
 
 export default Form;

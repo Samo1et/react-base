@@ -1,41 +1,33 @@
-import React, { Component } from "react";
-import ItemArticle from "./ItemArticle";
+import React, { useState } from "react";
+import Articles from "./Articles";
 import Form from "./Form";
 
 const defaultState = [
-    {
-      id: 1,
-      title: "First article title",
-      about: "First article about",
-    },
-    {
-      id: 2,
-      title: "Second article title",
-      about: "Second article about",
-    },
-]
+  {
+    id: 1,
+    title: "First article title",
+    about: "First article about",
+  },
+  {
+    id: 2,
+    title: "Second article title",
+    about: "Second article about",
+  },
+];
+export const ArticleContext = React.createContext();
 
-export class Faq extends Component {
-  state = {
-    articles: defaultState,
-  };
+function Faq() {
+  const [articles, setArticles] = useState(defaultState);
 
-  addArticle = ({ title, about }) => {
-    if (title && about) {
-      this.setState({articles: [...this.state.articles, {title, about}]})
-    }
-  }
-
-  render() {
-    return (
+  return (
+    <ArticleContext.Provider value={[articles, setArticles]}>
       <div>
-        {this.state.articles.map((article) => (
-          <ItemArticle id={article.id} article={article} />
-        ))}
-        <Form addArticle={this.addArticle} />
+        <Articles />
+        <Form />
       </div>
-    );
-  }
+    </ArticleContext.Provider>
+
+  );
 }
 
 export default Faq;
