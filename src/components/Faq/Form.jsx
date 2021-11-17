@@ -1,17 +1,13 @@
 import React, { useContext } from "react";
 import styles from "./faq.module.scss";
 import {ArticleContext} from './index'
-import useForm from './useForm'
+import useForm from '../../hooks/useForm'
 
 function validator(values) {
     let errors = {};
 
     if (!values.title) {
       errors.title =  "Title is required"
-    }
-
-    if (!values.title !== 'title') {
-      errors.title =  "Title isn't title"
     }
 
     if (!values.about) {
@@ -32,10 +28,9 @@ function Form() {
   } = useForm(submitForm, validator)
 
   function submitForm () {
-    return () => setArticles(prev => [...prev, values])
+    setArticles(prev => [...prev, values])
   }
 
-  console.log(styles)
 
   return (
     <div>
